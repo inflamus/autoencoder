@@ -1,0 +1,273 @@
+
+# MovieThumbs blacklist
+# This is a list with words that should be removed from filenames when looking for posters
+# Everything after this word is deleted from the name
+
+# For speed reasons this list is only checked if a first search got no results
+
+# Put each word on a separate line, upper or lower case does not matter
+# Lines that begin with '#' are ignored
+
+theatrical cutrarbg
+theatrical cut
+dual audio
+extended cut
+sample
+new source
+directors cut
+zest
+dd
+spikie
+oo0oo
+pixel
+blu ray
+kira
+salem
+fansub
+fastsub
+vostfr
+
+
+# Common subtitle languages. More have to be added.
+dutch
+swedish
+german
+english
+
+#Tags
+USURY
+AN0NYMOUS
+ANONYM0US
+AN0NYM0US
+NOEX
+HD4U
+HMiDiMADRiDi
+DRONES
+FiDO
+SEPTiC
+Goatlove
+Felony
+0SEC
+FGT
+DOGE
+BATV
+CADAVER
+WiKi
+KRiNe
+ARTEFAC
+ROVERS
+ROVERSrarbg
+CBGB
+CBGBrarbg
+MgB
+MgBETRG
+ETRG
+x264ETRG
+AiRLiNE
+LiBERTY
+SiNNERS
+VETO
+REFiNED
+EVO
+brassetv
+VeDeTT
+VeDeTTrarbg
+GECKOS
+DAA
+UTT
+PopHD
+REMARKABLE
+rarbg
+#  eyes
+PSYCHD
+DIMENSION
+IMMERSE
+LOL
+ULSHD
+CARPEDIEM
+JYK
+LOST
+NERDHD
+ROUGH
+SEIGHT
+TMB
+TBL
+AMIABLE
+ROUGH
+tomcat12
+mgb
+remastered
+YIFY
+BLOWrarbg
+BLOW
+WEB DL
+WEBDL
+eztv
+killerseztv
+2hd
+2hdeztv
+NTb
+# These are some filters taken from XBMC
+# http://wiki.xbmc.org/index.php?title=Userdata/advancedsettings.xml#.3Ccleanstrings.3E
+part
+custom
+dvdivx
+fragment
+internal
+limited
+multisubs
+subs
+proper
+repack
+rerip
+retail
+r3
+r5
+bd5
+svcd
+readnfo
+nfofix
+unrated
+telesync
+telecine
+hrhdtv
+hrhd
+xxx
+www
+link to
+truefrench
+sparks
+remux
+4k
+nrdhd
+up4u
+
+
+# Video source filters
+# Taken from filebot. Filebot is a great app to rename you movie collection, you should check it out ;)
+# http://www.filebot.net/
+HDCAM
+IMAX
+CAMRip
+CAM
+PDVD
+TELESYNC
+PDVD
+PPVRip
+PPV
+DVDSCREENER
+SCREENER
+DVDSCR
+BDSCR
+SCR
+R4
+R5LINE
+R5
+xvidvd
+DVDRip
+DVDR
+DVD
+TVRip
+dsrip
+DSR
+PDTV
+SDTV
+hdtvrip
+HDTV
+DVBRip
+DVB
+DTHRip
+VODRip
+VODR
+BDRip
+BRRip
+BluRay
+BDR
+BRScreener
+BRScr
+HDDVD
+HDRip
+WorkPrint
+VHS
+VCD
+TELECINE
+WEBDL
+WEBRip
+ithd
+iTunesHD
+VFF
+LiMiTED
+UNRATED
+PROPER
+FRENCH
+MULTI
+EXTENDED
+hdma
+hd ma
+sparksrarbg
+
+# Video formats
+# Also taken from filebot
+mp4
+mkv
+avi
+divx5
+DivX
+Xvid
+AVC
+x265
+hevc
+x264
+h264
+3ivx
+mpg
+mpeg4
+mpeg
+mp3
+aac
+aac20
+aac2 0
+AAC2.0
+ac3
+dd20
+dd51
+2ch
+6ch
+DTSDMA
+DTSHD
+DTS
+TrueHD
+480i
+480p
+576p
+576i
+720i
+1080i
+7p
+720p
+18p
+1080p
+PAL
+NTSC
+PublicHD
+ETRG
+Granpa
+Friends
+carpediem
+spaced
+boo
+SansDOUTE
+VISUAL
+TMB
+
+# Some short words. Disabled because they might give a lot of false positives
+#hd
+#hq
+#ws
+#ts
+#tc
+#se
+#WS
+#HR
+#dc
+#fs
