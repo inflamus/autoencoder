@@ -8,7 +8,7 @@ $URLS = array(
 // 	'https://torrentz.eu/feedA?q=a+state+of+trance+split+sbd', // a state of trance split, after inspiron quited
 // 	'http://kickass.so/usearch/category%3Amusic%20user%3Aash968%20age%3Aweek/?rss=1', // ash968 Trance torrents
 // 	'https://torrentz.eu/feed?f=jessica+jones+720p+hevc',//jessica jones hevc 720p
-	'http://torrentz.eu/feedA?q=a+state+of+trance+split+bluefree', // Bluefree version of ASOT splitted
+// 	'http://torrentz.eu/feedA?q=a+state+of+trance+split+bluefree', // Bluefree version of ASOT splitted
 	
 );
 
