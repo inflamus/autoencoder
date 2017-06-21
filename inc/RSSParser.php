@@ -30,6 +30,9 @@ class MagnetLink
 // 		'udp://3.rarbg.me:80/announce',
 // 		'udp://[...]
 // 		'udp://11.rarbg.me:80/announce',
+
+// T411 : 'https://tracker.t411.ai/8dc9462fdf5cd3e924ff45bca0802814/announce
+// url tracker / inflamuss key / announce
 		
 	);
 	
