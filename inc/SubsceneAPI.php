@@ -49,7 +49,11 @@ class SubsceneAPI
 			else
 			{
 				if(!$data = file_get_contents($this->subs_url))
-					return $this->error = false;
+				{
+					$this->subs_url.="-".substr($TMDB->release_date,0,4);
+					if(!$data = file_get_contents($this->subs_url))
+						return $this->error = false;
+				}
 				file_put_contents($cache, $data);
 			}
 		else

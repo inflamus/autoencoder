@@ -1,7 +1,7 @@
 <?php
 class FileNameParser
 {
-	const BLACKLIST = '/usr/share/MovieThumbs/blacklist';
+	const BLACKLIST = __DIR__.'/blacklist';
 	
 	// From MovieThumbs (https://github.com/mdemeyer/MovieThumbs/blob/master/core/fileparser.cpp)
 	/* REGEXSEPARATORS

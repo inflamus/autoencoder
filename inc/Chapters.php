@@ -25,7 +25,7 @@ class Chapters
 			if($append)
 				$time = (empty($this->chaps) ? $this->D : end($this->chaps)[0])->add(new DateInterval('PT'.$time->format('H\Hi\Ms\S')));
 		}
-		static $i = 0;
+		static $i = 1;
 		$this->chaps[] = array(
 			$time,
 			!is_null($name) ? $name : 'Chapter '.$i++,
@@ -43,20 +43,20 @@ class Chapters
 		return $file ? file_put_contents($file, $o) : $o;
 	}
 	
-	public function toOGG($file = null)
+	public function toOGM($file = null)
 	{
 		$o = '';
 		foreach($this->chaps as $k=>$v)
 		{
 			$n=str_pad((string)$k, 2, '0', STR_PAD_LEFT);
-			$o .= 'CHAPTER'.$n.'NAME='.$v[1]."\n";
 			$o .= 'CHAPTER'.$n.'='.$v[0]->format('H:i:s').'.000'."\n";
+			$o .= 'CHAPTER'.$n.'NAME='.$v[1]."\n";
 		}
 		return $file ? file_put_contents($file, $o) : $o;
 	}
 	
 	public function __toString()
 	{
-		return $this->toOGG();
+		return $this->toOGM();
 	}
 }
