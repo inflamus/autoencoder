@@ -8,7 +8,7 @@
 // => voir à passer en 720p ?
 class VideoEncoder extends Encoder
 {
-	const OUTPUT_DIRECTORY = '/home/romein/Videos/Films Verbatim';
+	const OUTPUT_DIRECTORY = '/home/romein/Videos'; // without endslash
 	const OUTPUT_SERIES_AUTOMATIC_DIRECTORY = true;  // move series to their matchinn directory
 
 	const SERIEOUTFILE = '%name% %season%x%episode% - %title%';  // available : title, episode, name, season, year(of the first air_date)
@@ -21,7 +21,7 @@ class VideoEncoder extends Encoder
 	const INCLUDE_POSTER_IN_MOVIES = true;
 	
 	const AUTOMATIC_PREFERRED_LANG = 'eng'; // choose, between two audio tracks, the lang to allocate much more quality.
-	const AUTOMATIC_DECREASE_AUDIO_LEVEL = 1.2; // audioquality - automaticdecrease  when the lang is not the preferred. default : 0.8 to 1.5
+	const AUTOMATIC_DECREASE_AUDIO_LEVEL = 1; // audioquality - automaticdecrease  when the lang is not the preferred. default : 0.8 to 1.5
 
 	// Encoding params
 	const SERIE_VIDEOSIZE_W = 976;
@@ -31,18 +31,17 @@ class VideoEncoder extends Encoder
 	const MOVIE_VIDEOCODEC = 'libx264';
 	
 	public static $DoNotReencodeVideo = array(
-		'Serie' => array('hevc',
-				),
+		'Serie' => array('hevc'),
 		);
 	
 	const SERIE_VIDEOQUALITY = 22.7;
 	const MOVIE_VIDEOQUALITY = 22.6; //will be modified function of the genre of the movie (increased on action/adventure films)
 	const MOVIE_VIDEOQUALITY_AUTO = true; // ...if this is checked to true.
 	
-	const SERIE_AUDIOCODEC = 'libfdk_aac';
-	const MOVIE_AUDIOCODEC = 'libfdk_aac';
+	const SERIE_AUDIOCODEC = 'libopus'; //libfdk_aac, libopus
+	const MOVIE_AUDIOCODEC = 'libopus'; //libfdk_aac, libopus
 	
-	public static $DoNotReencodeAudio = array('aac', 'mp3'); //here the codecs tocopy directly without reencoding to the output file
+	public static $DoNotReencodeAudio = array('aac', 'mp3', 'opus'); //here the codecs tocopy directly without reencoding to the output file
 	
 	const SERIE_AUDIOCHANNELS = 2; // put 2 or 'stereo', or 6 aka '5.1'
 	const MOVIE_AUDIOCHANNELS = 6; //will be modified too...
@@ -233,27 +232,35 @@ class VideoEncoder extends Encoder
 		return $this;
 	}
 	
-	public static function AverageAudioQuality($quality, $channels = 2)
+	public static function AverageAudioQuality($quality, $channels = 2, $codec = 'libfdk_aac')
 	{
 		// From 1 to 10;  (values are mono-channel)  libfdk_aac
-		// 		1-------2-------3-------4-------5-------6-------7-------8-------9-------10
-		// mono		16k	24k	32k	40k	56k	80k	96k	112k	128k	160k
+		// 		1	2	3	4	5	6	7	8	9	10
+		// mono	16k	24k	32k	40k	56k	80k	96k	112k	128k	160k
 		// stereo	32k	48k	64k	80k	112k	160k	192k	224k	256k	320k
-		// 5.1		--	--	192k	240k	336k	480k	576k	672k	768k	960k
+		// 5.1	--	--	192k	240k	336k	480k	576k	672k	768k	960k
 		// profile	hev2	hev2	he	he	lc	lc	lc	lc	lc	lc
 		$quality = (float)$quality;
 		$channels = (int)$channels;
 		if($quality<1)	$quality = 1;
 		if($quality>10)	$quality = 10;
-		if($channels == 6 && $quality < 2)
-			$quality = 2;
-		if($quality <= 4) // HE / HE+PS
-			$bitrate = (16 + round(($quality-1)*8))*$channels;
-		else	// -vbr  start at AAC-LC vbr = 2 ~40k mono  (horrible btw)
-			$quality = round( 0.5 * $quality , 1); // quality=5 => -vbr 2.5
-		return isset($bitrate) ? array('bitrate' => $bitrate.'k', 'profile' => ($quality>2 ? 'aac_he' : 'aac_he_v2')) :
-			array('quality' => $quality);
-		
+		switch($codec)
+		{
+			default:
+			case 'libfdk_aac':
+				if($channels == 6 && $quality < 2)
+					$quality = 2;
+				if($quality <= 4) // HE / HE+PS
+					$bitrate = (16 + round(($quality-1)*8))*$channels;
+				else	// -vbr  start at AAC-LC vbr = 2 ~40k mono  (horrible btw)
+					$quality = round( 0.5 * $quality , 1); // quality=5 => -vbr 2.5
+				return isset($bitrate) ? array('bitrate' => $bitrate.'k', 'profile' => ($quality>2 ? 'aac_he' : 'aac_he_v2')) :
+					array('quality' => $quality);
+			break;
+			case 'libopus':
+				return array('bitrate' => round($channels==6 ? 64*$quality : 16*$channels*$quality).'k');
+			break;
+		}
 	}
 	
 	private function Serie(FileNameParser $filename)
@@ -346,12 +353,14 @@ class VideoEncoder extends Encoder
 						->Channels($channels);
 					
 		// 			print($quality);
-					$quality = self::AverageAudioQuality($quality, $channels);
+					$quality = self::AverageAudioQuality($quality, $channels, self::SERIE_AUDIOCODEC);
 		// 			print_r($quality);
 					if(isset($quality['bitrate']))
-						$sa	->Bitrate($this->addVar('bitrate_'.$sa->lang, $quality['bitrate']))
-							->Profile($this->addVar('profile_'.$sa->lang, $quality['profile']));
-					else	$sa	->Quality($this->addVar('quality_'.$sa->lang, $quality['quality']));
+						$sa	->Bitrate($this->addVar('bitrate_'.$sa->lang, $quality['bitrate']));
+					if(isset($quality['profile']))
+						$sa	->Profile($this->addVar('profile_'.$sa->lang, $quality['profile']));
+					if(isset($quality['quality']))
+						$sa	->Quality($this->addVar('quality_'.$sa->lang, $quality['quality']));
 					
 					// Normalize sound (volumedetect + volume to 0dB)
 					$sa->	Normalize();
@@ -642,11 +651,13 @@ class VideoEncoder extends Encoder
 				{
 					$sa	->Codec(self::MOVIE_AUDIOCODEC)
 						->Channels($channels);
-					$quality = $this->AverageAudioQuality($quality, $channels);
+					$quality = $this->AverageAudioQuality($quality, $channels, self::MOVIE_AUDIOCODEC);
 					if(isset($quality['bitrate']))
-						$sa	->Bitrate($this->addVar('bitrate_'.$sa->lang, $quality['bitrate']))
-							->Profile($this->addVar('profile_'.$sa->lang, $quality['profile']));
-					else	$sa	->Quality($this->addVar('quality_'.$sa->lang, $quality['quality']));
+						$sa	->Bitrate($this->addVar('bitrate_'.$sa->lang, $quality['bitrate']));
+					if(isset($quality['profile']))
+						$sa	->Profile($this->addVar('profile_'.$sa->lang, $quality['profile']));
+					if(isset($quality['quality']))
+						$sa	->Quality($this->addVar('quality_'.$sa->lang, $quality['quality']));
 					
 					// Normalize volumedetect + volume()
 					$sa->	Normalize();
