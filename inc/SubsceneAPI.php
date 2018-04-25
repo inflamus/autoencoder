@@ -6,7 +6,7 @@
 class SubsceneAPI 
 {
 	const TRUE_SIMILARITY = 87; // defaeult is 80% of similarity tomak eit good. increase to be more accurate, but you may loose some files without the exact name format
-	const SUBSCENE_URL = 'http://subscene.com';
+	const SUBSCENE_URL = 'https://subscene.com';
 	const CACHE_LIST = true;
 
 	private $filename = '';
@@ -144,8 +144,8 @@ class SubsceneAPI
 		if(!$this->Has($lang))
 			return false;
 		$link = $this->sAvailable[$lang]['link'];
-		if(!preg_match('/href="(\/subtitle\/download\?.+)"/U', file_get_contents($link), $matches))
-			return false;
+		if(!preg_match('/href="(\/subtitles\/[a-z-]+text\/.+)"/U', file_get_contents($link), $matches))
+			throw new Exception('No subscene link found to download the file');
 		print 'Downloading... '.$this->sAvailable[$lang]['link']."\n";
 		copy(self::SUBSCENE_URL.$matches[1], $tmp = sys_get_temp_dir().'/'.md5(microtime()).'.zip');
 		$zip = new ZipArchive();
@@ -161,8 +161,10 @@ class SubsceneAPI
 // 				if($pct < self::TRUE_SIMILARITY)
 // 					continue;
 			}
-			$zip->extractTo(dirname($file), $filename);
-			rename(dirname($file).'/'.$filename, $file);
+			if($zip->extractTo(dirname($file), $filename))
+				rename(dirname($file).'/'.$filename, $file);
+			else
+				exit('error');
 			$zip->close();
 		}
 		else
